@@ -13,7 +13,7 @@ from flask import Flask, request, session, g, url_for, render_template
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/jungle'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:password@localhost/jungle'
 db = SQLAlchemy(app)
 
 # Setup our error logging
