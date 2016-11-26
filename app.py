@@ -28,7 +28,7 @@ def index():
     '''
 
 @app.errorhandler(404)
-def four_oh_four():
+def four_oh_four(url):
     return '''
     <h1 style="color:red;">
     Whoops! Looks like you've entered an invalid url.
