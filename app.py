@@ -16,5 +16,13 @@ def index():
     <h4>Wow. What an exciting application!</h4>
     '''
 
+@app.errorhandler(404)
+def four_oh_four():
+    return '''
+    <h1 style="color:red;">
+    Whoops! Looks like you've entered an invalid url.
+    </h1>
+    '''
+
 if __name__ == '__main__':
     app.run(debug=True)
