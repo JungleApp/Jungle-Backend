@@ -51,3 +51,19 @@ class Post(db.Model):
 
     def __repr__(self):
         return '<Post %r>' % self.id
+
+class Media(db.Model):
+    __tablename__ = 'Media'
+
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('Post.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+    path = db.Column(db.String(128))
+
+    def __init__(self, post_id, user_id, path):
+        self.post_id = post_id
+        self.user_id = user_id
+        self.path = path
+
+    def __repr__(self):
+        return '<Media %r>' % self.path
