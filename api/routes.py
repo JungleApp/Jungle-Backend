@@ -27,3 +27,7 @@ class MediaData(Resource):
         # TODO: Insert call to mySQL here
         return ''
 
+# Add resources to our URI identifiers
+api.add_resource(UserData, '/api/user/<int:user_id>')
+api.add_resource(UserData, '/api/post/<int:post_id>')
+api.add_resource(UserData, '/api/media/<int:media_id>')
