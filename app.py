@@ -9,7 +9,7 @@
 
 # ip: 138.197.4.56
 
-from flask import Flask, request, session, g, url_for, render_template
+from flask import Flask, request, session, g, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
