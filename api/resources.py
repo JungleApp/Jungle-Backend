@@ -16,12 +16,12 @@ class UserData(Resource):
         return ''
 
 class PostData(Resource):
-    def get(self, post_id):
+    def get(self, post_id=None):
         # TODO: Insert call to mySQL here
         return ''
 
 class MediaData(Resource):
-    def get(self, media_id):
+    def get(self, media_id=None):
         # TODO: Insert call to mySQL here
         return ''
 

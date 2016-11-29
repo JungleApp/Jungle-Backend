@@ -13,7 +13,7 @@ from flask import Flask, request, session, g, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 from api.resources import *
-
+from database.models import *
 
 app = Flask(__name__)
 api = Api(app)
@@ -31,7 +31,6 @@ if app.debug is not True:
     file_handler.setFormatter(formatter)
     app.logger.addHandler(file_handler)
 
-
 @app.route('/')
 def index():
     return '''
@@ -40,6 +39,10 @@ def index():
     <h4>Wow. What an exciting application!</h4>
     '''
 
+@app.route('/api')
+def api():
+    jesse = User('jrbartola@gmail.com', 'johnnydepp')
+    db.session.
 
 @app.errorhandler(404)
 def four_oh_four(url):
