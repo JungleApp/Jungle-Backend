@@ -5,17 +5,20 @@
 #              |___|
 #
 # App-Backend
-# Last Revision: 11/28/16
+# Last Revision: 11/29/16
 
 # ip: 138.197.4.56
 
 from flask import Flask, request, session, g, url_for
 from flask_sqlalchemy import SQLAlchemy
+from flask_restful import Api
+from api.resources import *
+
 
 app = Flask(__name__)
+api = Api(app)
 
-# The following URI is incorrect-- the password has been omitted for security reasons
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:password@localhost/jungle'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:JungleDungle82@localhost/jungle'
 db = SQLAlchemy(app)
 
 # Setup our error logging
@@ -28,6 +31,7 @@ if app.debug is not True:
     file_handler.setFormatter(formatter)
     app.logger.addHandler(file_handler)
 
+
 @app.route('/')
 def index():
     return '''
@@ -36,6 +40,7 @@ def index():
     <h4>Wow. What an exciting application!</h4>
     '''
 
+
 @app.errorhandler(404)
 def four_oh_four(url):
     return '''
@@ -43,6 +48,12 @@ def four_oh_four(url):
     Whoops! Looks like you've entered an invalid url.
     </h1>
     '''
+
+
+# Add resources to our URI identifiers
+api.add_resource(UserData, '/api/user/<int:user_id>', '/api/user')
+api.add_resource(PostData, '/api/post/<int:post_id>', '/api/post')
+api.add_resource(MediaData, '/api/media/<int:media_id>', '/api/media')
 
 if __name__ == '__main__':
     app.run(debug=True)

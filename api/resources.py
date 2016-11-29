@@ -7,13 +7,11 @@
 # App-Models
 # Last Revision: 11/28/16
 
-from app import app
-from flask_restful import Api, Resource
+from flask_restful import Resource
 
-api = Api(app)
 
 class UserData(Resource):
-    def get(self, user_id):
+    def get(self, user_id=None):
         # TODO: Insert call to mySQL here
         return ''
 
@@ -27,7 +25,4 @@ class MediaData(Resource):
         # TODO: Insert call to mySQL here
         return ''
 
-# Add resources to our URI identifiers
-api.add_resource(UserData, '/api/user/<int:user_id>')
-api.add_resource(UserData, '/api/post/<int:post_id>')
-api.add_resource(UserData, '/api/media/<int:media_id>')
+

@@ -5,17 +5,18 @@
 #              |___|
 #
 # App-Models
-# Last Revision: 11/26/16
+# Last Revision: 11/29/16
 
 from app import db
 from datetime import datetime
+
 
 class User(db.Model):
     __tablename__ = 'User'
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True)
-    password = db.Column(db.String(128))
+    password = db.Column(db.String(255))
     join_date = db.Column(db.DateTime)
     last_login = db.Column(db.DateTime)
     login_count = db.Column(db.Integer, default=0)
