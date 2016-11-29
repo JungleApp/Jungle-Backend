@@ -42,7 +42,9 @@ def index():
 @app.route('/api')
 def api():
     jesse = User('jrbartola@gmail.com', 'johnnydepp')
-    db.session.
+    db.session.add(jesse)
+    db.session.commit()
+    return User.query.all()
 
 @app.errorhandler(404)
 def four_oh_four(url):
@@ -59,4 +61,4 @@ api.add_resource(PostData, '/api/post/<int:post_id>', '/api/post')
 api.add_resource(MediaData, '/api/media/<int:media_id>', '/api/media')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
