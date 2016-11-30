@@ -9,11 +9,11 @@
 
 # ip: 138.197.4.56
 
-from flask import Flask, request, session, g, url_for
+from flask import Flask, request, session, g, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 from api.resources import *
-from database.models import *
+from database.models import User, Post, Media
 from database.session import *
 
 app = Flask(__name__)
@@ -42,10 +42,12 @@ def index():
 
 @app.route('/api')
 def api_route():
-    jesse = User('jrbartola@gmail.com', 'johnnydepp')
-    ssession.add(jesse)
-    ssession.commit()
-    return User.query.all()
+    #from sqlalchemy import MetaData
+    #Base.metadata.create_all(engine)
+    #jesse = User('jrbartola@gmail.com', 'johnnydepp')
+    #ssession.add(jesse)
+    #ssession.commit()
+    return jsonify(json_list=ssession.query(User).order_by(User.id))
 
 @app.errorhandler(404)
 def four_oh_four(url):
