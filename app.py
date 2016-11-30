@@ -41,7 +41,7 @@ def index():
     '''
 
 @app.route('/api')
-def api():
+def api_route():
     jesse = User('jrbartola@gmail.com', 'johnnydepp')
     ssession.add(jesse)
     ssession.commit()
