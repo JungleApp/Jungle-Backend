@@ -14,12 +14,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 from api.resources import *
 from database.models import *
+from database.session import *
 
 app = Flask(__name__)
 api = Api(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:JungleDungle82@localhost/jungle'
-db = SQLAlchemy(app)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:JungleDungle82@localhost/jungle'
+# db = SQLAlchemy(app)
 
 # Setup our error logging
 if app.debug is not True:
