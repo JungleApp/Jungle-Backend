@@ -7,23 +7,26 @@
 # App-Models
 # Last Revision: 11/29/16
 
-from app import db
 from datetime import datetime
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, BLOB, \
+    DateTime, ForeignKey
 
+Base = declarative_base()
 
-class User(db.Model):
+class User(Base):
     __tablename__ = 'User'
 
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(64), unique=True)
-    password = db.Column(db.String(255))
-    join_date = db.Column(db.DateTime)
-    last_login = db.Column(db.DateTime)
-    login_count = db.Column(db.Integer, default=0)
-    name = db.Column(db.String(128), default=None)
-    location = db.Column(db.String(128), default=None)
-    points = db.Column(db.Integer, default=0)
-    num_posts = db.Column(db.Integer, default=0)
+    id = Column(Integer, primary_key=True)
+    email = Column(String(64), unique=True)
+    password = Column(String(255))
+    join_date = Column(DateTime)
+    last_login = Column(DateTime)
+    login_count = Column(Integer, default=0)
+    name = Column(String(128), default=None)
+    location = Column(String(128), default=None)
+    points = Column(Integer, default=0)
+    num_posts = Column(Integer, default=0)
 
     def __init__(self, email, password):
         self.email = email
@@ -35,14 +38,14 @@ class User(db.Model):
         return '<User %r>' % self.email
 
 # Classify Posts and Media as separate tables so we can join
-class Post(db.Model):
+class Post(Base):
     __tablename__ = 'Post'
 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
-    body = db.Column(db.BLOB, default="")
-    date_posted = db.Column(db.DateTime)
-    last_updated = db.Column(db.DateTime)
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('User.id'))
+    body = Column(BLOB, default="")
+    date_posted = Column(DateTime)
+    last_updated = Column(DateTime)
 
     def __init__(self, user_id, body):
         self.user_id = user_id
@@ -53,13 +56,13 @@ class Post(db.Model):
     def __repr__(self):
         return '<Post %r>' % self.id
 
-class Media(db.Model):
+class Media(Base):
     __tablename__ = 'Media'
 
-    id = db.Column(db.Integer, primary_key=True)
-    post_id = db.Column(db.Integer, db.ForeignKey('Post.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
-    path = db.Column(db.String(128))
+    id = Column(Integer, primary_key=True)
+    post_id = Column(Integer, ForeignKey('Post.id'))
+    user_id = Column(Integer, ForeignKey('User.id'))
+    path = Column(String(128))
 
     def __init__(self, post_id, user_id, path):
         self.post_id = post_id

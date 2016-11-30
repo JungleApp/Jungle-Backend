@@ -4,8 +4,8 @@
 # |_____|___|_|_|_  |_|___|
 #              |___|
 #
-# App-Models
-# Last Revision: 11/28/16
+# App-Resources
+# Last Revision: 11/29/16
 
 from flask_restful import Resource
 
