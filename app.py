@@ -5,7 +5,7 @@
 #              |___|
 #
 # App-Backend
-# Last Revision: 11/29/16
+# Last Revision: 11/30/16
 
 # ip: 138.197.4.56
 
@@ -43,8 +43,8 @@ def index():
 @app.route('/api')
 def api():
     jesse = User('jrbartola@gmail.com', 'johnnydepp')
-    db.session.add(jesse)
-    db.session.commit()
+    ssession.add(jesse)
+    ssession.commit()
     return User.query.all()
 
 @app.errorhandler(404)
