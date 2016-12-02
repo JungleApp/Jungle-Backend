@@ -8,7 +8,7 @@
 # Last Revision: 11/29/16
 
 from flask_restful import Resource
-
+from database.session import ssession
 
 class UserData(Resource):
     def get(self, user_id=None):

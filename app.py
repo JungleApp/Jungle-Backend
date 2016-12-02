@@ -47,7 +47,18 @@ def api_route():
     #jesse = User('jrbartola@gmail.com', 'johnnydepp')
     #ssession.add(jesse)
     #ssession.commit()
-    return jsonify(json_list=ssession.query(User).order_by(User.id))
+    #return jsonify(json_list=ssession.query(User).order_by(User.id))
+    return ssession.query(User).order_by(User.id).first()
+
+@app.route('/errors')
+def errors_route():
+    errlog = open('errors.log', 'r+')
+    fullresp = ''
+
+    for line in errlog:
+        fullresp += line
+
+    return fullresp
 
 @app.errorhandler(404)
 def four_oh_four(url):
