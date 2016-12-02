@@ -56,7 +56,7 @@ def errors_route():
     fullresp = ''
 
     for line in errlog:
-        fullresp += line
+        fullresp += line + '\n'
 
     return fullresp
 
