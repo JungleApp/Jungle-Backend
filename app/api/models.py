@@ -8,8 +8,7 @@
 # Last Revision: 11/29/16
 
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired
-from flask_marshmallow import Marshmallow
-from app import db
+from app import db, ma
 from config import *
 
 # Define a base model for other database tables to inherit
@@ -86,3 +85,21 @@ class Media(Base):
     def __repr__(self):
         return '<Media %r>' % self.path
 
+
+class UserSchema(ma.ModelSchema):
+    class Meta:
+        model = User
+
+
+class PostSchema(ma.ModelSchema):
+    class Meta:
+        model = Post
+
+
+class MediaSchema(ma.ModelSchema):
+    class Meta:
+        model = Media
+
+user_schema = UserSchema()
+post_schema = PostSchema()
+media_schema = MediaSchema()

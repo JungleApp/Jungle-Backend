@@ -23,9 +23,11 @@ db = SQLAlchemy(app)
 api = Api(app)
 ma = Marshmallow(app)
 
+
 @app.route('/')
 def index():
     return '<h1>Jungle</h1>'
+
 
 @app.errorhandler(404)
 def four_oh_four(url):
@@ -36,15 +38,14 @@ def four_oh_four(url):
     '''
 
 # Import a module / component using its blueprint handler variable (mod_auth)
-from app.mod_auth.controllers import mod_auth as auth_module
+#from app.mod_auth.controllers import mod_auth as auth_module
 
 # Register blueprint(s)
-app.register_blueprint(auth_module)
+#app.register_blueprint(auth_module)
 # app.register_blueprint(xyz_module)
 # ..
 
 # Build the database:
-# This will create the database file using SQLAlchemy
 db.create_all()
 
 
@@ -75,20 +76,7 @@ if app.debug is not True:
     file_handler.setFormatter(formatter)
     app.logger.addHandler(file_handler)
 
-class UserSchema(ma.ModelSchema):
-    class Meta:
-        model = User
 
-class PostSchema(ma.ModelSchema):
-    class Meta:
-        model = Post
-
-class MediaSchema(ma.ModelSchema):
-    class Meta:
-        model = Media
-
-user_schema = UserSchema()
-post_schema = PostSchema()
 
 @app.route('/api')
 def api_route():

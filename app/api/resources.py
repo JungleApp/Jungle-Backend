@@ -8,22 +8,22 @@
 # Last Revision: 12/3/16
 
 import hashlib
-
 from flask_httpauth import HTTPBasicAuth
 from flask_restful import Resource, reqparse
-from app.api.models import User, Post
-from app.api.session import ssession
+from app.api.models import User, Post, Media
 from app import api
 
 parser = reqparse.RequestParser()
 auth = HTTPBasicAuth()
+
+
 
 @auth.verify_password
 def verify_password(email_or_token, password):
     # first try to authenticate by token
     user = User.verify_auth_token(email_or_token)
     if not user:
-        user = ssession.query(User).filter_by(email=email_or_token).first()
+        user = User.query.filter_by(email=email_or_token).first()
         if not hasattr(user, 'password') or hashlib.sha224(password).hexdigest() not in user.password:
             return False
     g.user = user
@@ -37,7 +37,7 @@ class UserData(Resource):
             # Return a list of all the users
             #abort(400, error="GET request expects a user id parameter")
 
-        res = ssession.query(User).filter_by(id=user_id).first()
+        res = User.query.filter_by(id=user_id).first()
 
         # There doesn't seem to be a sensible way to serialize this :(
         return {'id': res.id, 'email': res.email, 'password': res.password,
@@ -49,11 +49,13 @@ class UserData(Resource):
 
 class PostData(Resource):
     def get(self, post_id=None):
-        return ssession.query(Post).first()
+        return Post.query.first()
 
 class MediaData(Resource):
     def get(self, media_id=None):
         return ''
+
+
 
 
 # Add resources to our URI identifiers
