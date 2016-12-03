@@ -5,15 +5,15 @@
 #              |___|
 #
 # App-Resources
-# Last Revision: 11/29/16
+# Last Revision: 12/3/16
 
 import hashlib
 
 from flask_httpauth import HTTPBasicAuth
 from flask_restful import Resource, reqparse
-
 from app.api.models import User, Post
 from app.api.session import ssession
+from app import api
 
 parser = reqparse.RequestParser()
 auth = HTTPBasicAuth()
@@ -56,3 +56,7 @@ class MediaData(Resource):
         return ''
 
 
+# Add resources to our URI identifiers
+api.add_resource(UserData, '/api/user/<int:user_id>', '/api/user')
+api.add_resource(PostData, '/api/post/<int:post_id>', '/api/post')
+api.add_resource(MediaData, '/api/media/<int:media_id>', '/api/media')
