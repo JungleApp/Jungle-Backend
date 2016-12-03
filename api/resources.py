@@ -9,11 +9,13 @@
 
 from flask_restful import Resource
 from database.session import ssession
+from database.models import User, Post, Media
 
 class UserData(Resource):
     def get(self, user_id=None):
         # TODO: Insert call to mySQL here
-        return ''
+
+        return ssession.query(User).first()
 
 class PostData(Resource):
     def get(self, post_id=None):

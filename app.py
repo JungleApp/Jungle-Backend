@@ -5,22 +5,18 @@
 #              |___|
 #
 # App-Backend
-# Last Revision: 11/30/16
+# Last Revision: 12/2/16
 
 # ip: 138.197.4.56
 
-from flask import Flask, request, session, g, url_for, jsonify
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask#, request, session, g, url_for, jsonify
 from flask_restful import Api
 from api.resources import *
-from database.models import User, Post, Media
-from database.session import *
+from database.models import User#, Post, Media
+from database.session import ssession
 
 app = Flask(__name__)
 api = Api(app)
-
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:JungleDungle82@localhost/jungle'
-# db = SQLAlchemy(app)
 
 # Setup our error logging
 if app.debug is not True:
@@ -42,23 +38,13 @@ def index():
 
 @app.route('/api')
 def api_route():
-    #from sqlalchemy import MetaData
-    #Base.metadata.create_all(engine)
-    #jesse = User('jrbartola@gmail.com', 'johnnydepp')
-    #ssession.add(jesse)
-    #ssession.commit()
-    #return jsonify(json_list=ssession.query(User).order_by(User.id))
-    return ssession.query(User).order_by(User.id).first()
+    q = ssession.query(User).first()
+    return type(User)
 
 @app.route('/errors')
 def errors_route():
     errlog = open('errors.log', 'r+')
-    fullresp = ''
-
-    for line in errlog:
-        fullresp += line + '\n'
-
-    return fullresp
+    return errlog.read()
 
 @app.errorhandler(404)
 def four_oh_four(url):
