@@ -47,11 +47,7 @@ post_schema = PostSchema()
 
 @app.route('/')
 def index():
-    return '''
-    <h1>Jungle</h1>
-    <br/>
-    <h4>Wow. What an exciting application!</h4>
-    '''
+    return '<h1>Jungle</h1>'
 
 @app.route('/api')
 def api_route():
@@ -59,10 +55,6 @@ def api_route():
     res = user_schema.dump(q)
     return jsonify(res.data)
 
-@app.route('/errors')
-def errors_route():
-    errlog = open('errors.log', 'r+')
-    return errlog.read()
 
 @app.errorhandler(404)
 def four_oh_four(url):

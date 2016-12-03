@@ -13,6 +13,7 @@ from sqlalchemy import Column, Integer, String, BLOB, \
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired
 from flask_marshmallow import Marshmallow
 from app import db
+from config import *
 
 # Define a base model for other database tables to inherit
 class Base(db.Model):
@@ -27,11 +28,9 @@ class Base(db.Model):
 class User(Base):
     __tablename__ = 'User'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, nullable=False)
     email = Column(String(64), unique=True)
     password = Column(String(255))
-    join_date = Column(DateTime)
-    last_login = Column(DateTime)
     login_count = Column(Integer, default=0)
     name = Column(String(128), default=None)
     location = Column(String(128), default=None)
@@ -41,19 +40,17 @@ class User(Base):
     def __init__(self, email, password):
         self.email = email
         self.password = password
-        self.join_date = datetime.utcnow()
-        self.last_login = datetime.utcnow()
 
     def __repr__(self):
         return '<User %r>' % self.email
 
     def generate_auth_token(self, expiration=600):
-        s = Serializer('ahwf984hguablvjn98-3BFWPBSDFA1', expires_in=expiration)
+        s = Serializer(CSRF_SESSION_KEY, expires_in=expiration)
         return s.dumps({'id': self.id})
 
     @staticmethod
     def verify_auth_token(token):
-        s = Serializer('ahwf984hguablvjn98-3BFWPBSDFA1')
+        s = Serializer(CSRF_SESSION_KEY)
         try:
             data = s.loads(token)
         except SignatureExpired:
