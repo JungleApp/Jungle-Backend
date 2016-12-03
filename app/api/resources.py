@@ -8,9 +8,10 @@
 # Last Revision: 12/3/16
 
 import hashlib
+from flask import jsonify
 from flask_httpauth import HTTPBasicAuth
 from flask_restful import Resource, reqparse
-from app.api.models import User, Post, Media
+from app.api.models import *
 from app import api
 
 parser = reqparse.RequestParser()
@@ -37,15 +38,16 @@ class UserData(Resource):
             # Return a list of all the users
             #abort(400, error="GET request expects a user id parameter")
 
-        res = User.query.filter_by(id=user_id).first()
-
+        usr = User.query.filter_by(id=user_id).first()
+        res = user_schema.dump(usr)
+        return jsonify(res.data)
         # There doesn't seem to be a sensible way to serialize this :(
-        return {'id': res.id, 'email': res.email, 'password': res.password,
+        '''return {'id': res.id, 'email': res.email, 'password': res.password,
                 'join_date': res.join_date.isoformat(),
                 'last_login': res.last_login.isoformat(),
                 'login_count': res.login_count, 'name': res.name,
                 'location': res.location, 'points': res.points,
-                'num_posts': res.num_posts}
+                'num_posts': res.num_posts}'''
 
 class PostData(Resource):
     def get(self, post_id=None):
