@@ -39,7 +39,7 @@ def index():
 @app.route('/api')
 def api_route():
     q = ssession.query(User).first()
-    return type(User)
+    return str(type(User))
 
 @app.route('/errors')
 def errors_route():
