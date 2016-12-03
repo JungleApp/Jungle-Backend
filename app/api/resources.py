@@ -57,5 +57,7 @@ class MediaData(Resource):
         return ''
 
 
-
+api.add_resource(UserData, '/api/user/<int:user_id>', '/api/user')
+api.add_resource(PostData, '/api/post/<int:post_id>', '/api/post')
+api.add_resource(MediaData, '/api/media/<int:media_id>', '/api/media')
 
