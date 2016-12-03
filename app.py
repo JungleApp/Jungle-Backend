@@ -9,12 +9,13 @@
 
 # ip: 138.197.4.56
 
-from flask import Flask, request, session, g, url_for, jsonify
-from flask_restful import Api
 from api.resources import *
-from database.models import User, Post, Media
-from database.session import ssession
+from flask import Flask, jsonify
 from flask_marshmallow import Marshmallow
+from flask_restful import Api
+
+from app.api.models import User, Post, Media
+from app.api.session import ssession
 
 app = Flask(__name__)
 api = Api(app)

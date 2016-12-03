@@ -7,13 +7,13 @@
 # App-Resources
 # Last Revision: 11/29/16
 
-from flask_restful import Resource, abort, reqparse
-from database.session import ssession
-from database.models import User, Post, Media
-import json
-from flask_httpauth import HTTPBasicAuth
 import hashlib
 
+from flask_httpauth import HTTPBasicAuth
+from flask_restful import Resource, reqparse
+
+from app.api.models import User, Post
+from app.api.session import ssession
 
 parser = reqparse.RequestParser()
 auth = HTTPBasicAuth()
