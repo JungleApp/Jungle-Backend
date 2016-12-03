@@ -18,7 +18,6 @@ app = Flask(__name__)
 
 app.config.from_object('config')
 
-
 db = SQLAlchemy(app)
 api = Api(app)
 ma = Marshmallow(app)
@@ -56,4 +55,4 @@ def four_oh_four(url):
 # ..
 
 # Build the database:
-db.create_all()
+#db.create_all()

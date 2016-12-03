@@ -12,7 +12,7 @@ from flask import jsonify
 from flask_httpauth import HTTPBasicAuth
 from flask_restful import Resource, reqparse
 from app.api.models import *
-from app import api
+from app import api, app
 
 parser = reqparse.RequestParser()
 auth = HTTPBasicAuth()
@@ -55,6 +55,12 @@ class PostData(Resource):
 class MediaData(Resource):
     def get(self, media_id=None):
         return ''
+
+@app.route('/api/test')
+def testapi():
+    usr = User.query.filter_by(id=1).first()
+    res = user_schema.dump(usr)
+    return jsonify(res.data)
 
 
 api.add_resource(UserData, '/api/user/<int:user_id>', '/api/user')
