@@ -18,7 +18,6 @@ parser = reqparse.RequestParser()
 auth = HTTPBasicAuth()
 
 
-
 @auth.verify_password
 def verify_password(email_or_token, password):
     # first try to authenticate by token
@@ -60,7 +59,3 @@ class MediaData(Resource):
 
 
 
-# Add resources to our URI identifiers
-api.add_resource(UserData, '/api/user/<int:user_id>', '/api/user')
-api.add_resource(PostData, '/api/post/<int:post_id>', '/api/post')
-api.add_resource(MediaData, '/api/media/<int:media_id>', '/api/media')
