@@ -33,8 +33,9 @@ def verify_password(email_or_token, password):
 class UserData(Resource):
 
     def get(self, user_id=None):
-        if not user_id:
-            abort(400, error="GET request expects a user id parameter")
+        #if not user_id:
+            # Return a list of all the users
+            #abort(400, error="GET request expects a user id parameter")
 
         res = ssession.query(User).filter_by(id=user_id).first()
 
@@ -48,12 +49,10 @@ class UserData(Resource):
 
 class PostData(Resource):
     def get(self, post_id=None):
-        # TODO: Insert call to mySQL here
         return ssession.query(Post).first()
 
 class MediaData(Resource):
     def get(self, media_id=None):
-        if not
         return ''
 
 

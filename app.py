@@ -9,14 +9,16 @@
 
 # ip: 138.197.4.56
 
-from flask import Flask#, request, session, g, url_for, jsonify
+from flask import Flask, request, session, g, url_for, jsonify
 from flask_restful import Api
 from api.resources import *
-from database.models import User#, Post, Media
+from database.models import User, Post, Media
 from database.session import ssession
+from flask_marshmallow import Marshmallow
 
 app = Flask(__name__)
 api = Api(app)
+ma = Marshmallow(app)
 
 # Setup our error logging
 if app.debug is not True:
@@ -27,6 +29,21 @@ if app.debug is not True:
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     file_handler.setFormatter(formatter)
     app.logger.addHandler(file_handler)
+
+class UserSchema(ma.ModelSchema):
+    class Meta:
+        model = User
+
+class PostSchema(ma.ModelSchema):
+    class Meta:
+        model = Post
+
+class MediaSchema(ma.ModelSchema):
+    class Meta:
+        model = Media
+
+user_schema = UserSchema()
+post_schema = PostSchema()
 
 @app.route('/')
 def index():
@@ -39,7 +56,8 @@ def index():
 @app.route('/api')
 def api_route():
     q = ssession.query(User).first()
-    return str(type(User))
+    res = user_schema.dump(q)
+    return jsonify(res.data)
 
 @app.route('/errors')
 def errors_route():
