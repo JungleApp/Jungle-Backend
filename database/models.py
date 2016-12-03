@@ -11,6 +11,7 @@ from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, BLOB, \
     DateTime, ForeignKey
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired
 
 Base = declarative_base()
 
@@ -36,6 +37,23 @@ class User(Base):
 
     def __repr__(self):
         return '<User %r>' % self.email
+
+    def generate_auth_token(self, expiration=600):
+        s = Serializer('ahwf984hguablvjn98-3BFWPBSDFA1', expires_in=expiration)
+        return s.dumps({'id': self.id})
+
+    @staticmethod
+    def verify_auth_token(token):
+        s = Serializer('ahwf984hguablvjn98-3BFWPBSDFA1')
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return None  # valid token, but expired
+        except BadSignature:
+            return None  # invalid token
+        ### Check this...
+        user = User.query.get(data['n_id'])
+        return user
 
 # Classify Posts and Media as separate tables so we can join
 class Post(Base):

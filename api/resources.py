@@ -7,25 +7,38 @@
 # App-Resources
 # Last Revision: 11/29/16
 
-from flask_restful import Resource
+from flask_restful import Resource, abort, reqparse
 from database.session import ssession
 from database.models import User, Post, Media
 import json
-import datetime, decimal
+from flask_httpauth import HTTPBasicAuth
+import hashlib
 
 
-def alchemyencoder(obj):
-    if isinstance(obj, datetime.date):
-        return obj.isoformat()
-    elif isinstance(obj, decimal.Decimal):
-        return float(obj)
+parser = reqparse.RequestParser()
+auth = HTTPBasicAuth()
+
+@auth.verify_password
+def verify_password(email_or_token, password):
+    # first try to authenticate by token
+    user = User.verify_auth_token(email_or_token)
+    if not user:
+        user = ssession.query(User).filter_by(email=email_or_token).first()
+        if not hasattr(user, 'password') or hashlib.sha224(password).hexdigest() not in user.password:
+            return False
+    g.user = user
+    return True
+
 
 class UserData(Resource):
+
     def get(self, user_id=None):
-        # TODO: Insert call to mySQL here
-        res = ssession.query(User).first()
-        #return ssession.query(User).first()
-        #return json.dumps([dict(r) for r in res], default=alchemyencoder)
+        if not user_id:
+            abort(400, error="GET request expects a user id parameter")
+
+        res = ssession.query(User).filter_by(id=user_id).first()
+
+        # There doesn't seem to be a sensible way to serialize this :(
         return {'id': res.id, 'email': res.email, 'password': res.password,
                 'join_date': res.join_date.isoformat(),
                 'last_login': res.last_login.isoformat(),
@@ -40,7 +53,7 @@ class PostData(Resource):
 
 class MediaData(Resource):
     def get(self, media_id=None):
-        # TODO: Insert call to mySQL here
+        if not
         return ''
 
 
