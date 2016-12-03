@@ -5,7 +5,7 @@
 #              |___|
 #
 # App-Backend
-# Last Revision: 12/2/16
+# Last Revision: 12/3/16
 
 # ip: 138.197.4.56
 
@@ -22,6 +22,16 @@ app.config.from_object('config')
 db = SQLAlchemy(app)
 api = Api(app)
 ma = Marshmallow(app)
+
+# Setup our error logging
+if app.debug is not True:
+    import logging
+    from logging.handlers import RotatingFileHandler
+    file_handler = RotatingFileHandler('errors.log', maxBytes=1024 * 1024 * 100, backupCount=20)
+    file_handler.setLevel(logging.ERROR)
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    file_handler.setFormatter(formatter)
+    app.logger.addHandler(file_handler)
 
 
 @app.route('/')
@@ -47,45 +57,3 @@ def four_oh_four(url):
 
 # Build the database:
 db.create_all()
-
-
-
-
-
-
-
-
-
-from api.resources import *
-from flask import Flask, jsonify
-
-from app.api.models import User, Post, Media
-from app.api.session import ssession
-
-app = Flask(__name__)
-api = Api(app)
-ma = Marshmallow(app)
-
-# Setup our error logging
-if app.debug is not True:
-    import logging
-    from logging.handlers import RotatingFileHandler
-    file_handler = RotatingFileHandler('errors.log', maxBytes=1024 * 1024 * 100, backupCount=20)
-    file_handler.setLevel(logging.ERROR)
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    file_handler.setFormatter(formatter)
-    app.logger.addHandler(file_handler)
-
-
-
-@app.route('/api')
-def api_route():
-    q = ssession.query(User).first()
-    res = user_schema.dump(q)
-    return jsonify(res.data)
-
-
-
-
-if __name__ == '__main__':
-    app.run(debug=False)
