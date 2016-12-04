@@ -33,11 +33,12 @@ def verify_password(email_or_token, password):
 class UserData(Resource):
 
     def get(self, user_id=None):
-        #if not user_id:
+        if not user_id:
             # Return a list of all the users
-            #abort(400, error="GET request expects a user id parameter")
-
-        usr = User.query.filter_by(id=user_id).first()
+            usr = User.query.all()
+        else:
+            usr = User.query.filter_by(id=user_id).first()
+            
         res = user_schema.dump(usr)
         return jsonify(res.data)
         # There doesn't seem to be a sensible way to serialize this :(
