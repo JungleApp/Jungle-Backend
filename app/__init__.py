@@ -10,17 +10,20 @@
 # ip: 138.197.4.56
 
 from flask import Flask
-from flask_restful import Api
+#from flask_restful import Api
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+#from app.api.resources import api_blueprint
 
 app = Flask(__name__)
 
 app.config.from_object('config')
 
 db = SQLAlchemy(app)
-api = Api(app)
+#api = Api(app)
 ma = Marshmallow(app)
+
+#app.register_blueprint(api_blueprint)
 
 # Setup our error logging
 if app.debug is not True:

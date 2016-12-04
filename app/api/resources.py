@@ -8,14 +8,18 @@
 # Last Revision: 12/3/16
 
 import hashlib
-from flask import jsonify
+from flask import jsonify, Blueprint
 from flask_httpauth import HTTPBasicAuth
-from flask_restful import Resource, reqparse
-from app.api.models import *
+from flask_restful import Resource, reqparse, Api
+from app.api.models import User, Post, Media, \
+    user_schema, post_schema, media_schema
 from app import api, app
 
+api = Api(app)
 parser = reqparse.RequestParser()
 auth = HTTPBasicAuth()
+
+api_blueprint = Blueprint('apiblueprint', __name__)
 
 
 @auth.verify_password
@@ -38,7 +42,7 @@ class UserData(Resource):
             usr = User.query.all()
         else:
             usr = User.query.filter_by(id=user_id).first()
-            
+
         res = user_schema.dump(usr)
         return jsonify(res.data)
         # There doesn't seem to be a sensible way to serialize this :(
