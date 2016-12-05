@@ -14,7 +14,6 @@ from flask_restful import Api, Resource, reqparse
 from flask_httpauth import HTTPBasicAuth
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-#from app.api.resources import api_blueprint
 #from app.api.resources import UserData, PostData, MediaData
 
 app = Flask(__name__)
@@ -25,7 +24,6 @@ db = SQLAlchemy(app)
 api_ = Api(app)
 ma = Marshmallow(app)
 
-#app.register_blueprint(api_blueprint)
 
 from app.api.resources import api_blueprint as blue
 
@@ -55,16 +53,10 @@ def four_oh_four(url):
     </h1>
     '''
 
-# Register blueprint(s)
-#app.register_blueprint(auth_module)
-# app.register_blueprint(xyz_module)
-# ..
-
 # Build the database:
 db.create_all()
 
-
-#api_blueprint = Blueprint('apiblueprint', __name__)
+# Register blueprint(s)
 from app.api.resources import UserData, PostData, MediaData
 
 api_.add_resource(UserData, '/api/user/<int:user_id>', '/api/user')
