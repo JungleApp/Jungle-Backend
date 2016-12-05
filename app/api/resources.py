@@ -39,7 +39,7 @@ class UserData(Resource):
     def get(self, user_id=None):
         if not user_id:
             # Return a list of all the users
-            usr = User.query.all()
+            usr = User.query.limit(50).all()
         else:
             usr = User.query.filter_by(id=user_id).first()
 
@@ -63,7 +63,7 @@ def testapi():
         db.session.commit()
     except Exception as e:
         db.session.rollback()
-        return 'Rollback because of %s', e
+        return 'Rollback because of ' + str(e)
     return 'success!'
 
 
