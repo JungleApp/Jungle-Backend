@@ -12,7 +12,7 @@
 from flask import Flask, jsonify
 from flask_restful import Api, Resource, reqparse
 from flask_httpauth import HTTPBasicAuth
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 #from app.api.resources import api_blueprint
 #from app.api.resources import UserData, PostData, MediaData
@@ -55,19 +55,14 @@ def four_oh_four(url):
     </h1>
     '''
 
-# Import a module / component using its blueprint handler variable (mod_auth)
-#from app.mod_auth.controllers import mod_auth as auth_module
-
 # Register blueprint(s)
 #app.register_blueprint(auth_module)
 # app.register_blueprint(xyz_module)
 # ..
 
 # Build the database:
-#db.create_all()
+db.create_all()
 
-parser = reqparse.RequestParser()
-auth = HTTPBasicAuth()
 
 #api_blueprint = Blueprint('apiblueprint', __name__)
 from app.api.resources import UserData, PostData, MediaData

@@ -13,7 +13,7 @@ from flask_httpauth import HTTPBasicAuth
 from flask_restful import Resource, reqparse, Api
 from app.api.models import User, Post, Media, \
     user_schema, post_schema, media_schema
-from app import app#, api
+from app import db
 
 #api = Api(app)
 parser = reqparse.RequestParser()
@@ -63,9 +63,15 @@ class MediaData(Resource):
 
 @api_blueprint.route('/api/test')
 def testapi():
-    usr = User.query.filter_by(id=1).first()
-    res = user_schema.dump(usr)
-    return jsonify(res.data)
+    usr = User('jrbartola@gmail.com', 'pass123', 'Jesse Bartola', 'Amherst')
+    try:
+        db.session.add(usr)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return 'Rollback...'
+    #res = user_schema.dump(usr)
+    return 'success!'
 
 
 
