@@ -59,7 +59,7 @@ class PostData(Resource):
 
 class MediaData(Resource):
     def get(self, media_id=None):
-        return ''
+        return Media.query.first()
 
 @api_blueprint.route('/api/test')
 def testapi():

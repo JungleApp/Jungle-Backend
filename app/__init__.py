@@ -22,7 +22,7 @@ app = Flask(__name__)
 app.config.from_object('config')
 
 db = SQLAlchemy(app)
-api = Api(app)
+api_ = Api(app)
 ma = Marshmallow(app)
 
 #app.register_blueprint(api_blueprint)
@@ -70,8 +70,8 @@ parser = reqparse.RequestParser()
 auth = HTTPBasicAuth()
 
 #api_blueprint = Blueprint('apiblueprint', __name__)
+from app.api.resources import UserData, PostData, MediaData
 
-
-# api.add_resource(UserData, '/api/user/<int:user_id>', '/api/user')
-# api.add_resource(PostData, '/api/post/<int:post_id>', '/api/post')
-# api.add_resource(MediaData, '/api/media/<int:media_id>', '/api/media')
+api_.add_resource(UserData, '/api/user/<int:user_id>', '/api/user')
+api_.add_resource(PostData, '/api/post/<int:post_id>', '/api/post')
+api_.add_resource(MediaData, '/api/media/<int:media_id>', '/api/media')
