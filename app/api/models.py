@@ -32,7 +32,11 @@ class User(Base):
     points = db.Column(db.Integer, default=0)
     num_posts = db.Column(db.Integer, default=0)
 
-    def __init__(self, email, password):
+    def __init__(self, email, password, name=None, location=None):
+        if name is not None:
+            self.name = name
+        if location is not None:
+            self.location = location
         self.email = email
         self.password = password
 
