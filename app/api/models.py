@@ -16,9 +16,9 @@ class Base(db.Model):
 
     __abstract__ = True
 
-    id = db.db.Column(db.Integer, primary_key=True)
-    date_created = db.db.Column(db.DateTime, default=db.func.current_timestamp())
-    date_modified = db.db.Column(db.DateTime, default=db.func.current_timestamp(),
+    id = db.Column(db.Integer, primary_key=True)
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
                               onupdate=db.func.current_timestamp())
 
 class User(Base):

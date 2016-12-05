@@ -9,21 +9,27 @@
 
 # ip: 138.197.4.56
 
-from flask import Flask
-#from flask_restful import Api
+from flask import Flask, jsonify
+from flask_restful import Api, Resource, reqparse
+from flask_httpauth import HTTPBasicAuth
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 #from app.api.resources import api_blueprint
+#from app.api.resources import UserData, PostData, MediaData
 
 app = Flask(__name__)
 
 app.config.from_object('config')
 
 db = SQLAlchemy(app)
-#api = Api(app)
+api = Api(app)
 ma = Marshmallow(app)
 
 #app.register_blueprint(api_blueprint)
+
+from app.api.resources import api_blueprint as blue
+
+app.register_blueprint(blue)
 
 # Setup our error logging
 if app.debug is not True:
@@ -59,3 +65,13 @@ def four_oh_four(url):
 
 # Build the database:
 #db.create_all()
+
+parser = reqparse.RequestParser()
+auth = HTTPBasicAuth()
+
+#api_blueprint = Blueprint('apiblueprint', __name__)
+
+
+# api.add_resource(UserData, '/api/user/<int:user_id>', '/api/user')
+# api.add_resource(PostData, '/api/post/<int:post_id>', '/api/post')
+# api.add_resource(MediaData, '/api/media/<int:media_id>', '/api/media')

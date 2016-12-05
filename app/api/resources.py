@@ -13,9 +13,9 @@ from flask_httpauth import HTTPBasicAuth
 from flask_restful import Resource, reqparse, Api
 from app.api.models import User, Post, Media, \
     user_schema, post_schema, media_schema
-from app import api, app
+from app import app#, api
 
-api = Api(app)
+#api = Api(app)
 parser = reqparse.RequestParser()
 auth = HTTPBasicAuth()
 
@@ -61,14 +61,11 @@ class MediaData(Resource):
     def get(self, media_id=None):
         return ''
 
-@app.route('/api/test')
+@api_blueprint.route('/api/test')
 def testapi():
     usr = User.query.filter_by(id=1).first()
     res = user_schema.dump(usr)
     return jsonify(res.data)
 
 
-api.add_resource(UserData, '/api/user/<int:user_id>', '/api/user')
-api.add_resource(PostData, '/api/post/<int:post_id>', '/api/post')
-api.add_resource(MediaData, '/api/media/<int:media_id>', '/api/media')
 
