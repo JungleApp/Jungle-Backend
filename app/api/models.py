@@ -5,7 +5,7 @@
 #              |___|
 #
 # App-Models
-# Last Revision: 11/29/16
+# Last Revision: 12/5/16
 
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired
 from app import db, ma

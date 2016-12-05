@@ -5,7 +5,7 @@
 #              |___|
 #
 # App-Resources
-# Last Revision: 12/3/16
+# Last Revision: 12/5/16
 
 import hashlib
 from flask import jsonify, Blueprint
