@@ -45,13 +45,7 @@ class UserData(Resource):
 
         res = user_schema.dump(usr)
         return jsonify(res.data)
-        # There doesn't seem to be a sensible way to serialize this :(
-        '''return {'id': res.id, 'email': res.email, 'password': res.password,
-                'join_date': res.join_date.isoformat(),
-                'last_login': res.last_login.isoformat(),
-                'login_count': res.login_count, 'name': res.name,
-                'location': res.location, 'points': res.points,
-                'num_posts': res.num_posts}'''
+
 
 class PostData(Resource):
     def get(self, post_id=None):
@@ -69,8 +63,7 @@ def testapi():
         db.session.commit()
     except Exception as e:
         db.session.rollback()
-        return 'Rollback...'
-    #res = user_schema.dump(usr)
+        return 'Rollback because of %s', e
     return 'success!'
 
 
