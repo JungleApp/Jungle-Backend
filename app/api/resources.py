@@ -37,9 +37,9 @@ def verify_password(email_or_token, password):
 class UserData(Resource):
 
     def get(self, user_id=None):
-        if not user_id:
+        if user_id is None:
             # Return a list of all the users
-            usr = User.query.limit(50).all()
+            usr = User.query.all()
         else:
             usr = User.query.filter_by(id=user_id).first()
 
