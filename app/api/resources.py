@@ -65,9 +65,7 @@ def testapi():
         tried = db.session.query(User).filter_by(email=u.email).first()
         if not tried:
             try:
-                db.session.add(usr)
-                db.session.add(usr2)
-                db.session.add(usr3)
+                db.session.add(u)
                 db.session.commit()
             except Exception as e:
                 db.session.rollback()
