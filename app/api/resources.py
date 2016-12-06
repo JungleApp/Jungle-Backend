@@ -58,8 +58,12 @@ class MediaData(Resource):
 @api_blueprint.route('/api/test')
 def testapi():
     usr = User('jrbartola@gmail.com', 'pass123', 'Jesse Bartola', 'Amherst')
+    usr2 = User('johnny@gmail.com', 'thisisabadpassword', 'Johnny Depp', 'Slamherst')
+    usr3 = User('jimmyjones@bones.com', 'abcdefg', 'JimmyJones III')
     try:
         db.session.add(usr)
+        db.session.add(usr2)
+        db.session.add(usr3)
         db.session.commit()
     except Exception as e:
         db.session.rollback()
