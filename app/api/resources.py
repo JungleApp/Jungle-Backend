@@ -44,19 +44,25 @@ class UserData(Resource):
             usr = User.query.filter_by(id=user_id).first()
 
         res = user_schema.dump(usr)
-        return jsonify(res.data)
+        return jsonify(res.data), 201
 
 
 class PostData(Resource):
     def get(self, post_id=None):
-        return Post.query.first()
+        if post_id is None:
+            pst = Post.query.all()
+        else:
+            pst = Post.query.filter_by(id=post_id).first()
+
+        res = post_schema.dump(pst)
+        return jsonify(res.data), 201
 
 class MediaData(Resource):
     def get(self, media_id=None):
         return Media.query.first()
 
-@api_blueprint.route('/api/test')
-def testapi():
+@api_blueprint.route('/api/testuser')
+def adduser_api():
     usr = User('jrbartola@gmail.com', 'pass123', 'Jesse Bartola', 'Amherst')
     usr2 = User('johnny@gmail.com', 'thisisabadpassword', 'Johnny Depp', 'Slamherst')
     usr3 = User('jimmyjones@bones.com', 'abcdefg', 'JimmyJones III')
@@ -70,7 +76,25 @@ def testapi():
             except Exception as e:
                 db.session.rollback()
                 return 'Rollback because of ' + str(e)
-    return 'success!'
+    return 'Success!'
+
+
+@api_blueprint.route('/api/testpost')
+def addpost_api():
+    p1 = Post(1, '''Hello all! I have finally guaranteed a housing appointment at...''')
+    p2 = Post(16, '''Today a very tragic event occurred-- one that will plague us for eternity''')
+    p3 = User(1, '''Another post made by me myself and I''')
+    ps = [p1, p2, p3]
+    for p in ps:
+        tried = db.session.query(Post).filter_by(id=p.id).first()
+        if not tried:
+            try:
+                db.session.add(p)
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+                return 'Rollback because of ' + str(e)
+    return 'Success!'
 
 
 
