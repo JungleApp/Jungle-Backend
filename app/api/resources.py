@@ -59,7 +59,13 @@ class PostData(Resource):
 
 class MediaData(Resource):
     def get(self, media_id=None):
-        return Media.query.first()
+        if media_id is None:
+            md = Media.query.all()
+        else:
+            md = Media.query.filter_by(id=media_id).first()
+
+        res = media_schema.dump(md)
+        return jsonify(res.data), 201
 
 @api_blueprint.route('/api/testuser')
 def adduser_api():
