@@ -35,6 +35,7 @@ def verify_password(email_or_token, password):
 
 
 class UserData(Resource):
+    decorators = [auth.login_required]
 
     def get(self, user_id=None):
         if user_id is None:
@@ -55,6 +56,8 @@ class UserData(Resource):
 
 
 class PostData(Resource):
+    decorators = [auth.login_required]
+
     def get(self, post_id=None):
         if post_id is None:
             pstq = Post.query.all()
@@ -72,6 +75,8 @@ class PostData(Resource):
         return jsonify({'response': res.data, 'status': 200})
 
 class MediaData(Resource):
+    decorators = [auth.login_required]
+    
     def get(self, media_id=None):
         if media_id is None:
             mdq = Media.query.all()
