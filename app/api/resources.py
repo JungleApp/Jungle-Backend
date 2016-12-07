@@ -39,14 +39,17 @@ class UserData(Resource):
     def get(self, user_id=None):
         if user_id is None:
             # Return a list of all the users
-            usr = User.query.all()
+            usrq = User.query.all()
+            usr = []
+            for u in usrq:
+                usr.append(u)
         else:
             usr = User.query.filter_by(id=user_id).first()
 
         # If no data matches our query send a 404
         if not usr:
             return jsonify({'response': None, 'status': 404})
-        
+
         res = user_schema.dump(usr)
         return jsonify({'response': res.data, 'status': 200})
 
@@ -54,7 +57,10 @@ class UserData(Resource):
 class PostData(Resource):
     def get(self, post_id=None):
         if post_id is None:
-            pst = Post.query.all()
+            pstq = Post.query.all()
+            pst = []
+            for p in pstq:
+                pst.append(p)
         else:
             pst = Post.query.filter_by(id=post_id).first()
 
@@ -68,7 +74,10 @@ class PostData(Resource):
 class MediaData(Resource):
     def get(self, media_id=None):
         if media_id is None:
-            md = Media.query.all()
+            mdq = Media.query.all()
+            md = []
+            for m in mdq:
+                md.append(m)
         else:
             md = Media.query.filter_by(id=media_id).first()
 
@@ -99,9 +108,9 @@ def adduser_api():
 
 @api_blueprint.route('/api/testpost')
 def addpost_api():
-    p1 = Post(1, '''Hello all! I have finally guaranteed a housing appointment at...''')
-    p2 = Post(16, '''Today a very tragic event occurred-- one that will plague us for eternity''')
-    p3 = Post(1, '''Another post made by me myself and I''')
+    p1 = Post(19, '''Hello all! I have finally guaranteed a housing appointment at...''')
+    p2 = Post(19, '''Today a very tragic event occurred-- one that will plague us for eternity''')
+    p3 = Post(21, '''Another post made by me myself and I''')
     ps = [p1, p2, p3]
     for p in ps:
         tried = db.session.query(Post).filter_by(id=p.id).first()
@@ -116,9 +125,9 @@ def addpost_api():
 
 @api_blueprint.route('/api/testmedia')
 def addmedia_api():
-    m1 = Media(1, 1, '/var/log/supervisor/test.txt')
-    m2 = Media(2, 1, '/home/www/flaskapp/hi.jpeg')
-    m3 = Media(3, 16, '/root/home/logging/profile.gif')
+    m1 = Media(4, 20, '/var/log/supervisor/test.txt')
+    m2 = Media(5, 20, '/home/www/flaskapp/hi.jpeg')
+    m3 = Media(6, 19, '/root/home/logging/profile.gif')
     marr = [m1, m2, m3]
     for m in marr:
         tried = db.session.query(Media).filter_by(id=m.id).first()
