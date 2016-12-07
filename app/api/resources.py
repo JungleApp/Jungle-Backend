@@ -8,7 +8,7 @@
 # Last Revision: 12/7/16
 
 import hashlib
-from flask import jsonify, Blueprint
+from flask import jsonify, Blueprint, g
 from flask_httpauth import HTTPBasicAuth
 from flask_restful import Resource, reqparse, Api
 from app.api.models import User, Post, Media, \
@@ -76,7 +76,7 @@ class PostData(Resource):
 
 class MediaData(Resource):
     decorators = [auth.login_required]
-    
+
     def get(self, media_id=None):
         if media_id is None:
             mdq = Media.query.all()
