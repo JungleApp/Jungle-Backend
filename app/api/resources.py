@@ -43,6 +43,10 @@ class UserData(Resource):
         else:
             usr = User.query.filter_by(id=user_id).first()
 
+        # If no data matches our query send a 404
+        if not usr:
+            return jsonify({'response': None, 'status': 404})
+        
         res = user_schema.dump(usr)
         return jsonify({'response': res.data, 'status': 200})
 
@@ -54,6 +58,10 @@ class PostData(Resource):
         else:
             pst = Post.query.filter_by(id=post_id).first()
 
+        # If no data matches our query send a 404
+        if not pst:
+            return jsonify({'response': None, 'status': 404})
+
         res = post_schema.dump(pst)
         return jsonify({'response': res.data, 'status': 200})
 
@@ -63,6 +71,10 @@ class MediaData(Resource):
             md = Media.query.all()
         else:
             md = Media.query.filter_by(id=media_id).first()
+
+        # If no data matches our query send a 404
+        if not md:
+            return jsonify({'response': None, 'status': 404})
 
         res = media_schema.dump(md)
         return jsonify({'response': res.data, 'status': 200})
