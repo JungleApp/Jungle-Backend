@@ -5,7 +5,7 @@
 #              |___|
 #
 # App-Resources
-# Last Revision: 12/5/16
+# Last Revision: 12/7/16
 
 import hashlib
 from flask import jsonify, Blueprint
@@ -44,7 +44,7 @@ class UserData(Resource):
             usr = User.query.filter_by(id=user_id).first()
 
         res = user_schema.dump(usr)
-        return jsonify(res.data)#, 201
+        return jsonify({'response': res.data, 'status': 200})
 
 
 class PostData(Resource):
@@ -55,7 +55,7 @@ class PostData(Resource):
             pst = Post.query.filter_by(id=post_id).first()
 
         res = post_schema.dump(pst)
-        return jsonify(res.data)#, 201
+        return jsonify({'response': res.data, 'status': 200})
 
 class MediaData(Resource):
     def get(self, media_id=None):
@@ -65,13 +65,13 @@ class MediaData(Resource):
             md = Media.query.filter_by(id=media_id).first()
 
         res = media_schema.dump(md)
-        return jsonify(res.data)#, 201
+        return jsonify({'response': res.data, 'status': 200})
 
 @api_blueprint.route('/api/testuser')
 def adduser_api():
-    usr = User('jrbartola@gmail.com', 'pass123', 'Jesse Bartola', 'Amherst')
-    usr2 = User('johnny@gmail.com', 'thisisabadpassword', 'Johnny Depp', 'Slamherst')
-    usr3 = User('jimmyjones@bones.com', 'abcdefg', 'JimmyJones III')
+    usr = User('jrbartola@gmail.com', hashlib.sha224('pass123').hexdigest(), 'Jesse Bartola', 'Amherst')
+    usr2 = User('johnny@gmail.com', hashlib.sha224('thisisabadpassword').hexdigest(), 'Johnny Depp', 'Slamherst')
+    usr3 = User('jimmyjones@bones.com', hashlib.sha224('abcdefg').hexdigest(), 'JimmyJones III')
     usrs = [usr, usr2, usr3]
     for u in usrs:
         tried = db.session.query(User).filter_by(email=u.email).first()
