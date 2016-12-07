@@ -89,7 +89,7 @@ def adduser_api():
 def addpost_api():
     p1 = Post(1, '''Hello all! I have finally guaranteed a housing appointment at...''')
     p2 = Post(16, '''Today a very tragic event occurred-- one that will plague us for eternity''')
-    p3 = User(1, '''Another post made by me myself and I''')
+    p3 = Post(1, '''Another post made by me myself and I''')
     ps = [p1, p2, p3]
     for p in ps:
         tried = db.session.query(Post).filter_by(id=p.id).first()
