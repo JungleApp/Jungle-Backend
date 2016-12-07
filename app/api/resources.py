@@ -10,12 +10,12 @@
 import hashlib
 from flask import jsonify, Blueprint, g
 from flask_httpauth import HTTPBasicAuth
-from flask_restful import Resource, reqparse, Api
+from flask_restful import Resource, reqparse
 from app.api.models import User, Post, Media, \
     user_schema, post_schema, media_schema
 from app import db
 
-#api = Api(app)
+
 parser = reqparse.RequestParser()
 auth = HTTPBasicAuth()
 
