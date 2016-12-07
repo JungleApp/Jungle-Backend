@@ -104,6 +104,6 @@ class MediaSchema(ma.ModelSchema):
     class Meta:
         model = Media
 
-user_schema = UserSchema()
-post_schema = PostSchema()
-media_schema = MediaSchema()
+user_schema = UserSchema(many=True)
+post_schema = PostSchema(many=True)
+media_schema = MediaSchema(many=True)
