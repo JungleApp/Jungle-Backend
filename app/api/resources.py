@@ -44,7 +44,7 @@ class UserData(Resource):
             usr = User.query.filter_by(id=user_id).first()
 
         res = user_schema.dump(usr)
-        return jsonify(res.data), 201
+        return jsonify(res.data)#, 201
 
 
 class PostData(Resource):
@@ -55,7 +55,7 @@ class PostData(Resource):
             pst = Post.query.filter_by(id=post_id).first()
 
         res = post_schema.dump(pst)
-        return jsonify(res.data), 201
+        return jsonify(res.data)#, 201
 
 class MediaData(Resource):
     def get(self, media_id=None):
@@ -65,7 +65,7 @@ class MediaData(Resource):
             md = Media.query.filter_by(id=media_id).first()
 
         res = media_schema.dump(md)
-        return jsonify(res.data), 201
+        return jsonify(res.data)#, 201
 
 @api_blueprint.route('/api/testuser')
 def adduser_api():
