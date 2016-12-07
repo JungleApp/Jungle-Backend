@@ -96,5 +96,22 @@ def addpost_api():
                 return 'Rollback because of ' + str(e)
     return 'Success!'
 
+@api_blueprint.route('/api/testmedia')
+def addmedia_api():
+    m1 = Media(1, 1, '/var/log/supervisor/test.txt')
+    m2 = Media(2, 1, '/home/www/flaskapp/hi.jpeg')
+    m3 = Media(3, 16, '/root/home/logging/profile.gif')
+    marr = [m1, m2, m3]
+    for m in marr:
+        tried = db.session.query(Media).filter_by(id=m.id).first()
+        if not tried:
+            try:
+                db.session.add(m)
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+                return 'Rollback because of ' + str(e)
+    return 'Success!'
+
 
 
