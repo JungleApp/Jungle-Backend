@@ -40,10 +40,11 @@ class UserData(Resource):
     def get(self, user_id=None):
         if user_id is None:
             # Return a list of all the users
-            usrq = User.query.all()
-            usr = []
-            for u in usrq:
-                usr.append(u)
+            # usrq = User.query.all()
+            # usr = []
+            # for u in usrq:
+            #     usr.append(u)
+            usr = User.query.all()
         else:
             usr = User.query.filter_by(id=user_id).first()
 
@@ -60,10 +61,11 @@ class PostData(Resource):
 
     def get(self, post_id=None):
         if post_id is None:
-            pstq = Post.query.all()
-            pst = []
-            for p in pstq:
-                pst.append(p)
+            # pstq = Post.query.all()
+            # pst = []
+            # for p in pstq:
+            #     pst.append(p)
+            pst = Post.query.all()
         else:
             pst = Post.query.filter_by(id=post_id).first()
 
@@ -79,10 +81,11 @@ class MediaData(Resource):
 
     def get(self, media_id=None):
         if media_id is None:
-            mdq = Media.query.all()
-            md = []
-            for m in mdq:
-                md.append(m)
+            # mdq = Media.query.all()
+            # md = []
+            # for m in mdq:
+            #     md.append(m)
+            md = Media.query.all()
         else:
             md = Media.query.filter_by(id=media_id).first()
 
