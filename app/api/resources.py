@@ -104,7 +104,7 @@ class UserData(Resource):
             # If we pass all the checks we're golden!
             return jsonify({'response': user_schema.dump(q).data, 'status': 200})
         else:
-            return jsonify({'response': 'Duplicate User for email \'' + email + '\''})
+            return jsonify({'response': 'Duplicate User for email \'' + email + '\'', 'status': 422})
 
 
 class PostData(Resource):
