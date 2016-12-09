@@ -8,7 +8,7 @@
 # Last Revision: 12/7/16
 
 import hashlib
-from flask import jsonify, Blueprint, g
+from flask import jsonify, Blueprint, g, request
 from flask_httpauth import HTTPBasicAuth
 from flask_restful import Resource, reqparse
 from app.api.models import User, Post, Media, \
@@ -50,6 +50,9 @@ class UserData(Resource):
 
         res = user_schema.dump(usr)
         return jsonify({'response': res.data, 'status': 200})
+
+    def post(self):
+        # Todo
 
 
 class PostData(Resource):
