@@ -56,7 +56,6 @@ class User(Base):
             return None  # valid token, but expired
         except BadSignature:
             return None  # invalid token
-        ### Check this...
         user = User.query.get(data['id'])
         return user
 

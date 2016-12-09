@@ -52,7 +52,14 @@ class UserData(Resource):
         return jsonify({'response': res.data, 'status': 200})
 
     def post(self):
-        # Todo
+        json_args = request.get_json()
+        if not json_args:
+            return jsonify({'response': 'Missing POST request arguments for User',
+                            'status': 400})
+        data, errors = user_schema.load(json_args)
+        if errors:
+            return jsonify({'response': 'Bad JSON arguments', 'status': 400})
+
 
 
 class PostData(Resource):
