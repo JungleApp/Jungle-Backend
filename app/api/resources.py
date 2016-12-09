@@ -17,6 +17,23 @@ from app import db
 
 
 parser = reqparse.RequestParser()
+
+# Populate our parsers for different schemas
+user_parser = parser.copy()
+user_parser.add_argument('email', type=str, required=True, help='Need a valid email')
+user_parser.add_argument('password', type=str, required=True, help='Need a valid password')
+user_parser.add_argument('name', type=str, required=False)
+user_parser.add_argument('location', type=str, required=False)
+
+post_parser = parser.copy()
+post_parser.add_argument('user_id', type=int, required=True, help='Need a valid user id')
+post_parser.add_argument('body', type=str, required=False)
+
+media_parser = parser.copy()
+media_parser.add_argument('post_id', type=int, required=True, help='Need a valid post id')
+media_parser.add_argument('user_id', type=int, required=True, help='Need a valid user id')
+media_parser.add_argument('path', type=str, required=True, help='Need an absolute path to media')
+
 auth = HTTPBasicAuth()
 
 api_blueprint = Blueprint('apiblueprint', __name__)
@@ -37,6 +54,7 @@ def verify_password(email_or_token, password):
 class UserData(Resource):
     decorators = [auth.login_required]
 
+
     def get(self, user_id=None):
         if user_id is None:
             # Return a list of all the users
@@ -53,12 +71,13 @@ class UserData(Resource):
 
     def post(self):
         json_args = request.get_json()
+        #return jsonify({'response': json_args})
         if not json_args:
             return jsonify({'response': 'Missing POST request arguments for User',
                             'status': 400})
         data, errors = user_schema.load(json_args)
         if errors:
-            return jsonify({'response': 'Bad JSON arguments: ' + str(errors), 'status': 422})
+            return jsonify({'response': 'Bad JSON arguments: ' + str(errors) + 'with data ' + str(data), 'status': 422})
         if 'email' not in data:
             return jsonify({'response': 'Missing \'email\' argument in POST request',
                             'status': 422})

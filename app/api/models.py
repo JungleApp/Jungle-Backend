@@ -66,9 +66,10 @@ class Post(Base):
     user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
     body = db.Column(db.BLOB, default="")
 
-    def __init__(self, user_id, body):
+    def __init__(self, user_id, body=None):
         self.user_id = user_id
-        self.body = body
+        if body:
+            self.body = body
 
     def __repr__(self):
         return '<Post %r>' % self.id
