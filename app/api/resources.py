@@ -5,7 +5,7 @@
 #              |___|
 #
 # App-Resources
-# Last Revision: 12/7/16
+# Last Revision: 12/9/16
 
 import hashlib
 from flask import jsonify, Blueprint, g, request
@@ -70,14 +70,11 @@ class UserData(Resource):
         return jsonify({'response': res.data, 'status': 200})
 
     def post(self):
-        json_args = request.get_json()
+        data = request.get_json()
         #return jsonify({'response': json_args})
-        if not json_args:
+        if not data:
             return jsonify({'response': 'Missing POST request arguments for User',
                             'status': 400})
-        data, errors = user_schema.load(json_args)
-        if errors:
-            return jsonify({'response': 'Bad JSON arguments: ' + str(errors) + 'with data ' + str(data), 'status': 422})
         if 'email' not in data:
             return jsonify({'response': 'Missing \'email\' argument in POST request',
                             'status': 422})
@@ -102,13 +99,12 @@ class UserData(Resource):
             except Exception as e:
                 db.session.rollback()
                 return jsonify({'response': str(e), 'status': 422})
+            q = User.query.filter_by(email=email).first()
 
             # If we pass all the checks we're golden!
-            new_user = user_schema.dump(new_user)
-            return jsonify({'response': new_user.data, 'status': 200})
+            return jsonify({'response': user_schema.dump(q).data, 'status': 200})
         else:
             return jsonify({'response': 'Duplicate User for email \'' + email + '\''})
-
 
 
 class PostData(Resource):
