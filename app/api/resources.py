@@ -58,7 +58,38 @@ class UserData(Resource):
                             'status': 400})
         data, errors = user_schema.load(json_args)
         if errors:
-            return jsonify({'response': 'Bad JSON arguments', 'status': 400})
+            return jsonify({'response': 'Bad JSON arguments', 'status': 422})
+        if 'email' not in data:
+            return jsonify({'response': 'Missing \'email\' argument in POST request',
+                            'status': 422})
+        elif 'password' not in data:
+            return jsonify({'response': 'Missing \'password\' argument in POST request',
+                            'status': 422})
+        email, password, name, location = data['email'], data['password'], None, None
+
+        # Check if we have a name or location
+        if 'name' in data:
+            name = data['name']
+        if 'location' in data:
+            location = data['location']
+
+        # Now we check for a duplicate user-- Must be unique email!
+        dup = User.query.filter_by(email=email).first()
+        if not dup:
+            new_user = User(email, hashlib.sha224(password).hexdigest(), name, location)
+            try:
+                db.session.add(new_user)
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+                return jsonify({'response': str(e), 'status': 422})
+
+            # If we pass all the checks we're golden!
+            new_user = user_schema.dump(new_user)
+            return jsonify({'response': new_user.data, 'status': 200})
+        else:
+            return jsonify({'response': 'Duplicate User for email \'' + email + '\''})
+
 
 
 
