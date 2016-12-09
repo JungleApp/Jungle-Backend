@@ -58,7 +58,7 @@ class UserData(Resource):
                             'status': 400})
         data, errors = user_schema.load(json_args)
         if errors:
-            return jsonify({'response': 'Bad JSON arguments', 'status': 422})
+            return jsonify({'response': 'Bad JSON arguments: ' + str(errors), 'status': 422})
         if 'email' not in data:
             return jsonify({'response': 'Missing \'email\' argument in POST request',
                             'status': 422})
@@ -89,7 +89,6 @@ class UserData(Resource):
             return jsonify({'response': new_user.data, 'status': 200})
         else:
             return jsonify({'response': 'Duplicate User for email \'' + email + '\''})
-
 
 
 
