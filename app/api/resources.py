@@ -71,7 +71,7 @@ class UserData(Resource):
 
     def post(self):
         data = request.get_json()
-        #return jsonify({'response': json_args})
+
         if not data:
             return jsonify({'response': 'Missing POST request arguments for User',
                             'status': 400})
@@ -122,6 +122,35 @@ class PostData(Resource):
 
         res = post_schema.dump(pst)
         return jsonify({'response': res.data, 'status': 200})
+
+    def post(self):
+        data = request.get_json()
+
+        if not data:
+            return jsonify({'response': 'Missing POST request arguments for Post',
+                            'status': 400})
+        if 'user_id' not in data:
+            return jsonify({'response': 'Missing \'user_id\' argument in POST request',
+                            'status': 422})
+
+        user_id, body = data['user_id'], None
+
+        # Check if we have a body in the Post
+        if 'body' in data:
+            body = data['body']
+
+        new_post = Post(user_id, body)
+        try:
+            db.session.add(new_post)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'response': str(e), 'status': 422})
+        # TODO: find a way to retrieve a query from database immediately
+
+        # If we pass all the checks we're golden!
+        return jsonify({'response': {'user_id': user_id, 'body': body}, 'status': 200})
+
 
 class MediaData(Resource):
     decorators = [auth.login_required]
