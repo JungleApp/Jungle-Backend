@@ -5,7 +5,7 @@
 #              |___|
 #
 # App-Resources
-# Last Revision: 12/9/16
+# Last Revision: 12/10/16
 
 import hashlib
 from flask import jsonify, Blueprint, g, request
@@ -19,20 +19,20 @@ from app import db
 parser = reqparse.RequestParser()
 
 # Populate our parsers for different schemas
-user_parser = parser.copy()
-user_parser.add_argument('email', type=str, required=True, help='Need a valid email')
-user_parser.add_argument('password', type=str, required=True, help='Need a valid password')
-user_parser.add_argument('name', type=str, required=False)
-user_parser.add_argument('location', type=str, required=False)
-
-post_parser = parser.copy()
-post_parser.add_argument('user_id', type=int, required=True, help='Need a valid user id')
-post_parser.add_argument('body', type=str, required=False)
-
-media_parser = parser.copy()
-media_parser.add_argument('post_id', type=int, required=True, help='Need a valid post id')
-media_parser.add_argument('user_id', type=int, required=True, help='Need a valid user id')
-media_parser.add_argument('path', type=str, required=True, help='Need an absolute path to media')
+# user_parser = parser.copy()
+# user_parser.add_argument('email', type=str, required=True, help='Need a valid email')
+# user_parser.add_argument('password', type=str, required=True, help='Need a valid password')
+# user_parser.add_argument('name', type=str, required=False)
+# user_parser.add_argument('location', type=str, required=False)
+#
+# post_parser = parser.copy()
+# post_parser.add_argument('user_id', type=int, required=True, help='Need a valid user id')
+# post_parser.add_argument('body', type=str, required=False)
+#
+# media_parser = parser.copy()
+# media_parser.add_argument('post_id', type=int, required=True, help='Need a valid post id')
+# media_parser.add_argument('user_id', type=int, required=True, help='Need a valid user id')
+# media_parser.add_argument('path', type=str, required=True, help='Need an absolute path to media')
 
 auth = HTTPBasicAuth()
 
