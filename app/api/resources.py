@@ -168,6 +168,36 @@ class MediaData(Resource):
         res = media_schema.dump(md)
         return jsonify({'response': res.data, 'status': 200})
 
+    def post(self):
+        data = request.get_json()
+
+        if not data:
+            return jsonify({'response': 'Missing POST request arguments for Media',
+                            'status': 400})
+        if 'post_id' not in data:
+            return jsonify({'response': 'Missing \'post_id\' argument in POST request',
+                            'status': 422})
+        if 'user_id' not in data:
+            return jsonify({'response': 'Missing \'user_id\' argument in POST request',
+                            'status': 422})
+        if 'path' not in data:
+            return jsonify({'response': 'Missing \'path\' argument in POST request',
+                            'status': 422})
+
+        post_id, user_id, path = data['post_id'], data['user_id'], data['path']
+
+        new_media = Media(post_id, user_id, path)
+        try:
+            db.session.add(new_media)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'response': str(e), 'status': 422})
+        # TODO: find a way to retrieve a query from database immediately
+
+        # If we pass all the checks we're golden!
+        return jsonify({'response': {'post_id': post_id, 'user_id': user_id, 'path': path}, 'status': 200})
+
 @api_blueprint.route('/api/testuser')
 def adduser_api():
     usr = User('jrbartola@gmail.com', hashlib.sha224('pass123').hexdigest(), 'Jesse Bartola', 'Amherst')
