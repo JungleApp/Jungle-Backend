@@ -106,6 +106,20 @@ class UserData(Resource):
         else:
             return jsonify({'response': 'Duplicate User for email \'' + email + '\'', 'status': 422})
 
+    def put(self, user_id=None):
+
+
+    def delete(self, user_id=None):
+        if not user_id:
+            return jsonify({'response': 'Missing user_id argument for DELETE \'User\'', 'status': 400})
+        u = User.query.filter_by(id=user_id).first()
+        try:
+            db.session.delete(u)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'response': str(e), 'status': 422})
+
 
 class PostData(Resource):
     decorators = [auth.login_required]
@@ -150,6 +164,8 @@ class PostData(Resource):
 
         # If we pass all the checks we're golden!
         return jsonify({'response': {'user_id': user_id, 'body': body}, 'status': 200})
+
+    def put(self, post_id=None):
 
 
 class MediaData(Resource):
