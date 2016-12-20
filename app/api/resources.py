@@ -290,6 +290,20 @@ class MediaData(Resource):
         # Return updated Media if successful
         return jsonify({'response': media_schema.dump(med).data, 'status': 200})
 
+    def delete(self, media_id=None):
+        if not media_id:
+            return jsonify({'response': 'Missing \'media_id\' query argument in DELETE request',
+                            'status': 400})
+        med = Media.query.get(media_id)
+        try:
+            db.session.delete(med)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'response': str(e), 'status': 422})
+        # Return the Post entry we just removed
+        return jsonify({'response': post_schema(pst).dump, 'status': 200})
+
 @api_blueprint.route('/api/testuser')
 def adduser_api():
     usr = User('jrbartola@gmail.com', hashlib.sha224('pass123').hexdigest(), 'Jesse Bartola', 'Amherst')
