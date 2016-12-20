@@ -113,6 +113,20 @@ class UserData(Resource):
                 # We need some form of identification-- either id or email!
                 return jsonify({'response': 'Missing user_id/email argument for PUT \'User\'',
                                 'status': 400})
+            else:
+                usr = User.query.filter_by(email=data['email']).first()
+        else:
+            usr = User.query.get(user_id)
+
+        for n in data.keys():
+            setattr(usr, n, data[n])
+
+        try:
+            db.session.commit()
+        except Exception as e:
+            return jsonify({'response': str(e), 'status': 422})
+
+        return jsonify({'response': user_schema.dump(usr).data, 'status': 200})
 
 
     def delete(self, user_id=None):
