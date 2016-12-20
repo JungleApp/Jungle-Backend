@@ -166,7 +166,17 @@ class PostData(Resource):
         return jsonify({'response': {'user_id': user_id, 'body': body}, 'status': 200})
 
     def put(self, post_id=None):
-
+        data = request.get_json()
+        if not post_id:
+            return jsonify({'response': 'Missing \'post_id\' query argument in DELETE request',
+                            'status': 422})
+        pst = Post.query.filter_by(id=post_id).first()
+        try:
+            db.session.delete(pst)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'response': str(e), 'status': 422})
 
 class MediaData(Resource):
     decorators = [auth.login_required]
