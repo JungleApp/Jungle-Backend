@@ -60,7 +60,7 @@ class UserData(Resource):
             # Return a list of all the users
             usr = User.query.all()
         else:
-            usr = User.query.filter_by(id=user_id).first()
+            usr = User.query.get(user_id)
 
         # If no data matches our query send a 404
         if not usr:
@@ -112,7 +112,7 @@ class UserData(Resource):
     def delete(self, user_id=None):
         if not user_id:
             return jsonify({'response': 'Missing user_id argument for DELETE \'User\'', 'status': 400})
-        u = User.query.filter_by(id=user_id).first()
+        u = User.query.get(user_id)
         try:
             db.session.delete(u)
             db.session.commit()
@@ -128,7 +128,7 @@ class PostData(Resource):
         if post_id is None:
             pst = Post.query.all()
         else:
-            pst = Post.query.filter_by(id=post_id).first()
+            pst = Post.query.get(post_id)
 
         # If no data matches our query send a 404
         if not pst:
@@ -166,11 +166,20 @@ class PostData(Resource):
         return jsonify({'response': {'user_id': user_id, 'body': body}, 'status': 200})
 
     def put(self, post_id=None):
-        data = request.get_json()
         if not post_id:
             return jsonify({'response': 'Missing \'post_id\' query argument in DELETE request',
                             'status': 422})
-        pst = Post.query.filter_by(id=post_id).first()
+        pst = Post.query.get(post_id)
+        if not pst:
+            return jsonify({'response': 'Post with id \'' + pst.id + '\' not found', 'status': 404})
+
+
+    def delete(self, post_id=None):
+        #data = request.get_json()
+        if not post_id:
+            return jsonify({'response': 'Missing \'post_id\' query argument in DELETE request',
+                            'status': 422})
+        pst = Post.query.get(post_id)
         try:
             db.session.delete(pst)
             db.session.commit()
@@ -185,7 +194,7 @@ class MediaData(Resource):
         if media_id is None:
             md = Media.query.all()
         else:
-            md = Media.query.filter_by(id=media_id).first()
+            md = Media.query.get(media_id)
 
         # If no data matches our query send a 404
         if not md:
