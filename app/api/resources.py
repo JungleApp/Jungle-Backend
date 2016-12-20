@@ -125,7 +125,8 @@ class UserData(Resource):
         except Exception as e:
             db.session.rollback()
             return jsonify({'response': str(e), 'status': 422})
-
+        # Return the User entry we just removed
+        return jsonify({'response': user_schema.dump(u).data, 'status': 200})
 
 class PostData(Resource):
     decorators = [auth.login_required]
@@ -204,6 +205,8 @@ class PostData(Resource):
         except Exception as e:
             db.session.rollback()
             return jsonify({'response': str(e), 'status': 422})
+        # Return the Post entry we just removed
+        return jsonify({'response': post_schema(pst).dump, 'status': 200})
 
 class MediaData(Resource):
     decorators = [auth.login_required]
