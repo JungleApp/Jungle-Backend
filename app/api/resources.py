@@ -268,6 +268,28 @@ class MediaData(Resource):
         # If we pass all the checks we're golden!
         return jsonify({'response': {'post_id': post_id, 'user_id': user_id, 'path': path}, 'status': 200})
 
+    def put(self, media_id=None):
+        data = request.get_json()
+        if not media_id:
+            return jsonify({'response': 'Missing \'media_id\' query argument in PUT request',
+                            'status': 422})
+        med = Media.query.get(media_id)
+        if not med:
+            return jsonify({'response': 'Media with id \'' + med.id + '\' not found', 'status': 404})
+
+        # Go through each attribute and modify it
+        for n in data.keys():
+            setattr(med, n, data[n])
+
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'response': str(e), 'status': 422})
+
+        # Return updated Media if successful
+        return jsonify({'response': media_schema.dump(med).data, 'status': 200})
+
 @api_blueprint.route('/api/testuser')
 def adduser_api():
     usr = User('jrbartola@gmail.com', hashlib.sha224('pass123').hexdigest(), 'Jesse Bartola', 'Amherst')
