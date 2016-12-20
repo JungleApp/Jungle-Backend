@@ -301,8 +301,8 @@ class MediaData(Resource):
         except Exception as e:
             db.session.rollback()
             return jsonify({'response': str(e), 'status': 422})
-        # Return the Post entry we just removed
-        return jsonify({'response': post_schema(pst).dump, 'status': 200})
+        # Return the Media entry we just removed
+        return jsonify({'response': post_schema(med).dump, 'status': 200})
 
 @api_blueprint.route('/api/testuser')
 def adduser_api():
