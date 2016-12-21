@@ -49,7 +49,9 @@ class UserData(Resource):
             return jsonify({'response': None, 'status': 404})
 
         res = user_schema.dump(usr)
-        return jsonify({'response': res.data[0], 'status': 200})
+        if len(res.data) is 1:
+            return jsonify({'response': res.data[0], 'status': 200})
+        return jsonify({'response': res.data, 'status': 200})
 
     def post(self):
         data = request.get_json()
@@ -138,7 +140,10 @@ class PostData(Resource):
             return jsonify({'response': None, 'status': 404})
 
         res = post_schema.dump(pst)
-        return jsonify({'response': res.data[0], 'status': 200})
+
+        if len(res.data) is 1:
+            return jsonify({'response': res.data[0], 'status': 200})
+        return jsonify({'response': res.data, 'status': 200})
 
     def post(self):
         data = request.get_json()
@@ -218,7 +223,10 @@ class MediaData(Resource):
             return jsonify({'response': None, 'status': 404})
 
         res = media_schema.dump(md)
-        return jsonify({'response': res.data[0], 'status': 200})
+
+        if len(res.data) is 1:
+            return jsonify({'response': res.data[0], 'status': 200})
+        return jsonify({'response': res.data, 'status': 200})
 
     def post(self):
         data = request.get_json()
