@@ -5,7 +5,7 @@
 #              |___|
 #
 # App-Resources
-# Last Revision: 12/10/16
+# Last Revision: 12/20/16
 
 import hashlib
 from flask import jsonify, Blueprint, g, request
@@ -15,24 +15,6 @@ from app.api.models import User, Post, Media, \
     user_schema, post_schema, media_schema
 from app import db
 
-
-parser = reqparse.RequestParser()
-
-# Populate our parsers for different schemas
-# user_parser = parser.copy()
-# user_parser.add_argument('email', type=str, required=True, help='Need a valid email')
-# user_parser.add_argument('password', type=str, required=True, help='Need a valid password')
-# user_parser.add_argument('name', type=str, required=False)
-# user_parser.add_argument('location', type=str, required=False)
-#
-# post_parser = parser.copy()
-# post_parser.add_argument('user_id', type=int, required=True, help='Need a valid user id')
-# post_parser.add_argument('body', type=str, required=False)
-#
-# media_parser = parser.copy()
-# media_parser.add_argument('post_id', type=int, required=True, help='Need a valid post id')
-# media_parser.add_argument('user_id', type=int, required=True, help='Need a valid user id')
-# media_parser.add_argument('path', type=str, required=True, help='Need an absolute path to media')
 
 auth = HTTPBasicAuth()
 
@@ -60,14 +42,14 @@ class UserData(Resource):
             # Return a list of all the users
             usr = User.query.all()
         else:
-            usr = User.query.get(user_id)
+            usr = User.query.filter_by(id=user_id)
 
         # If no data matches our query send a 404
         if not usr:
             return jsonify({'response': None, 'status': 404})
 
         res = user_schema.dump(usr)
-        return jsonify({'response': res.data, 'status': 200})
+        return jsonify({'response': res.data[0], 'status': 200})
 
     def post(self):
         data = request.get_json()
@@ -99,10 +81,10 @@ class UserData(Resource):
             except Exception as e:
                 db.session.rollback()
                 return jsonify({'response': str(e), 'status': 422})
-            q = User.query.filter_by(email=email).first()
+            q = User.query.filter_by(email=email)
 
             # If we pass all the checks we're golden!
-            return jsonify({'response': user_schema.dump(q).data, 'status': 200})
+            return jsonify({'response': user_schema.dump(q).data[0], 'status': 200})
         else:
             return jsonify({'response': 'Duplicate User for email \'' + email + '\'', 'status': 422})
 
@@ -114,9 +96,9 @@ class UserData(Resource):
                 return jsonify({'response': 'Missing user_id/email argument for PUT \'User\'',
                                 'status': 400})
             else:
-                usr = User.query.filter_by(email=data['email']).first()
+                usr = User.query.filter_by(email=data['email'])
         else:
-            usr = User.query.get(user_id)
+            usr = User.query.filter_by(id=user_id)
 
         for n in data.keys():
             setattr(usr, n, data[n])
@@ -126,13 +108,13 @@ class UserData(Resource):
         except Exception as e:
             return jsonify({'response': str(e), 'status': 422})
 
-        return jsonify({'response': user_schema.dump(usr).data, 'status': 200})
+        return jsonify({'response': user_schema.dump(usr).data[0], 'status': 200})
 
 
     def delete(self, user_id=None):
         if not user_id:
             return jsonify({'response': 'Missing user_id argument for DELETE \'User\'', 'status': 400})
-        u = User.query.get(user_id)
+        u = User.query.filter_by(id=user_id)
         try:
             db.session.delete(u)
             db.session.commit()
@@ -140,7 +122,7 @@ class UserData(Resource):
             db.session.rollback()
             return jsonify({'response': str(e), 'status': 422})
         # Return the User entry we just removed
-        return jsonify({'response': user_schema.dump(u).data, 'status': 200})
+        return jsonify({'response': user_schema.dump(u).data[0], 'status': 200})
 
 class PostData(Resource):
     decorators = [auth.login_required]
@@ -149,14 +131,14 @@ class PostData(Resource):
         if post_id is None:
             pst = Post.query.all()
         else:
-            pst = Post.query.get(post_id)
+            pst = Post.query.filter_by(id=post_id)
 
         # If no data matches our query send a 404
         if not pst:
             return jsonify({'response': None, 'status': 404})
 
         res = post_schema.dump(pst)
-        return jsonify({'response': res.data, 'status': 200})
+        return jsonify({'response': res.data[0], 'status': 200})
 
     def post(self):
         data = request.get_json()
@@ -191,7 +173,7 @@ class PostData(Resource):
         if not post_id:
             return jsonify({'response': 'Missing \'post_id\' query argument in PUT request',
                             'status': 422})
-        pst = Post.query.get(post_id)
+        pst = Post.query.filter_by(id=post_id)
         if not pst:
             return jsonify({'response': 'Post with id \'' + pst.id + '\' not found', 'status': 404})
 
@@ -206,13 +188,13 @@ class PostData(Resource):
             return jsonify({'response': str(e), 'status': 422})
 
         # Return updated Post if successful
-        return jsonify({'response': post_schema.dump(pst).data, 'status': 200})
+        return jsonify({'response': post_schema.dump(pst).data[0], 'status': 200})
 
     def delete(self, post_id=None):
         if not post_id:
             return jsonify({'response': 'Missing \'post_id\' query argument in DELETE request',
                             'status': 400})
-        pst = Post.query.get(post_id)
+        pst = Post.query.filter_by(id=post_id)
         try:
             db.session.delete(pst)
             db.session.commit()
@@ -220,7 +202,7 @@ class PostData(Resource):
             db.session.rollback()
             return jsonify({'response': str(e), 'status': 422})
         # Return the Post entry we just removed
-        return jsonify({'response': post_schema(pst).dump, 'status': 200})
+        return jsonify({'response': post_schema(pst).dump[0], 'status': 200})
 
 class MediaData(Resource):
     decorators = [auth.login_required]
@@ -229,14 +211,14 @@ class MediaData(Resource):
         if media_id is None:
             md = Media.query.all()
         else:
-            md = Media.query.get(media_id)
+            md = Media.query.filter_by(id=media_id)
 
         # If no data matches our query send a 404
         if not md:
             return jsonify({'response': None, 'status': 404})
 
         res = media_schema.dump(md)
-        return jsonify({'response': res.data, 'status': 200})
+        return jsonify({'response': res.data[0], 'status': 200})
 
     def post(self):
         data = request.get_json()
@@ -273,7 +255,7 @@ class MediaData(Resource):
         if not media_id:
             return jsonify({'response': 'Missing \'media_id\' query argument in PUT request',
                             'status': 422})
-        med = Media.query.get(media_id)
+        med = Media.query.filter_by(id=media_id)
         if not med:
             return jsonify({'response': 'Media with id \'' + med.id + '\' not found', 'status': 404})
 
@@ -288,13 +270,13 @@ class MediaData(Resource):
             return jsonify({'response': str(e), 'status': 422})
 
         # Return updated Media if successful
-        return jsonify({'response': media_schema.dump(med).data, 'status': 200})
+        return jsonify({'response': media_schema.dump(med).data[0], 'status': 200})
 
     def delete(self, media_id=None):
         if not media_id:
             return jsonify({'response': 'Missing \'media_id\' query argument in DELETE request',
                             'status': 400})
-        med = Media.query.get(media_id)
+        med = Media.query.filter_by(id=media_id)
         try:
             db.session.delete(med)
             db.session.commit()
@@ -302,7 +284,7 @@ class MediaData(Resource):
             db.session.rollback()
             return jsonify({'response': str(e), 'status': 422})
         # Return the Media entry we just removed
-        return jsonify({'response': post_schema(med).dump, 'status': 200})
+        return jsonify({'response': post_schema(med).dump[0], 'status': 200})
 
 @api_blueprint.route('/api/testuser')
 def adduser_api():
