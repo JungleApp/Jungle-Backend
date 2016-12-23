@@ -36,7 +36,6 @@ def verify_password(email_or_token, password):
 class UserData(Resource):
     decorators = [auth.login_required]
 
-
     def get(self, user_id=None):
         if user_id is None:
             # Return a list of all the users
@@ -45,7 +44,7 @@ class UserData(Resource):
             usr = User.query.filter_by(id=user_id)
 
         # If no data matches our query send a 404
-        if not usr:
+        if not usr.first():
             return jsonify({'response': None, 'status': 404})
 
         res = user_schema.dump(usr)
@@ -136,7 +135,7 @@ class PostData(Resource):
             pst = Post.query.filter_by(id=post_id)
 
         # If no data matches our query send a 404
-        if not pst:
+        if not pst.first():
             return jsonify({'response': None, 'status': 404})
 
         res = post_schema.dump(pst)
@@ -219,7 +218,7 @@ class MediaData(Resource):
             md = Media.query.filter_by(id=media_id)
 
         # If no data matches our query send a 404
-        if not md:
+        if not md.first():
             return jsonify({'response': None, 'status': 404})
 
         res = media_schema.dump(md)
