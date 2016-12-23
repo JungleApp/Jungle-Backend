@@ -44,7 +44,7 @@ class UserData(Resource):
             usr = User.query.filter_by(id=user_id)
 
         # If no data matches our query send a 404
-        if not usr.first():
+        if len(usr) is 0:
             return jsonify({'response': None, 'status': 404})
 
         res = user_schema.dump(usr)
@@ -135,7 +135,7 @@ class PostData(Resource):
             pst = Post.query.filter_by(id=post_id)
 
         # If no data matches our query send a 404
-        if not pst.first():
+        if len(pst) is 0:
             return jsonify({'response': None, 'status': 404})
 
         res = post_schema.dump(pst)
@@ -218,7 +218,7 @@ class MediaData(Resource):
             md = Media.query.filter_by(id=media_id)
 
         # If no data matches our query send a 404
-        if not md.first():
+        if len(md) is 0:
             return jsonify({'response': None, 'status': 404})
 
         res = media_schema.dump(md)
