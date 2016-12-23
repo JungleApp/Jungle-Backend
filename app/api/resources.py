@@ -41,7 +41,7 @@ class UserData(Resource):
             # Return a list of all the users
             usr = User.query.all()
         else:
-            usr = User.query.filter_by(id=user_id)
+            usr = User.query.filter_by(id=user_id).all()
 
         # If no data matches our query send a 404
         if len(usr) is 0:
@@ -132,7 +132,7 @@ class PostData(Resource):
         if post_id is None:
             pst = Post.query.all()
         else:
-            pst = Post.query.filter_by(id=post_id)
+            pst = Post.query.filter_by(id=post_id).all()
 
         # If no data matches our query send a 404
         if len(pst) is 0:
@@ -215,7 +215,7 @@ class MediaData(Resource):
         if media_id is None:
             md = Media.query.all()
         else:
-            md = Media.query.filter_by(id=media_id)
+            md = Media.query.filter_by(id=media_id).all()
 
         # If no data matches our query send a 404
         if len(md) is 0:
