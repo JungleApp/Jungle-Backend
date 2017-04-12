@@ -3,3 +3,9 @@ errors.log
 app/api/__pycache__
 app/__pycache__
 __pycache__
+.DS_Store
+.idea
+.idea/workspace.xml
+server/env
+server/node_modules
+server/npm-debug.log
