@@ -2,7 +2,7 @@
   "name": "jungle",
   "version": "1.0.0",
   "description": "Back end server and database integration for mobile Jungle application",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
