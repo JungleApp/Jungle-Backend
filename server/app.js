@@ -9,8 +9,8 @@ var mongoose = require('mongoose');
 var expressValidator = require('express-validator');
 var fs = require('fs');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+require('./models/category');
+require('./models/organization');
 
 var app = express();
 
@@ -47,9 +47,6 @@ app.use(expressValidator({
     };
   }
 }));
-
-app.use('/', index);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
