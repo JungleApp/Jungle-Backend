@@ -12,6 +12,9 @@ var fs = require('fs');
 require('./models/category');
 require('./models/organization');
 
+var org = require('./routes/organization');
+var category = require('./routes/category');
+
 var app = express();
 
 var mongoObject = readMongoEnv();
@@ -47,6 +50,9 @@ app.use(expressValidator({
     };
   }
 }));
+
+app.use('/api/org', org);
+app.use('/api/category', category);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

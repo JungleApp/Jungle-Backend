@@ -19,17 +19,17 @@ var findQuery = function(schema, query, attr) {
 
     schema.find(query, attr, function(err, data) {
         if (err) {
-            object.isError = true;
+            object.success = false;
             object.errorMessage = err;
             object.type = httpStatus.INTERNAL_SERVER_ERROR;
             deferred.reject(object);
         } else if (data) {
-            object.isError = false;
+            object.success = true;
             object.data = data;
             object.type = httpStatus.OK;
             deferred.resolve(object);
         } else {
-            object.isError = false;
+            object.success = false;
             object.errorMessage = messages.NOT_FOUND;
             object.type = httpStatus.NOT_FOUND;
             deferred.resolve(object);
@@ -51,26 +51,31 @@ var saveQuery = function(objectToSave) {
 
     objectToSave.save(function(err, data) {
         if (err) {
-            object.isError = true;
+            object.success = false;
             if (err.hasOwnProperty('errmsg')){
                 if(err.errmsg.includes("duplicate key error")){
                     object.errorMessage = messages.ALREADY_EXISTS;
                     object.error = err.errmsg;
+                    object.type = httpStatus.CONFLICT;
+                }
+                else{
+                    object.error = err;
+                    object.type = httpStatus.INTERNAL_SERVER_ERROR;
                 }
             }
             else{
                 object.error = err;
+                object.type = httpStatus.INTERNAL_SERVER_ERROR;
             }
-            object.type = httpStatus.INTERNAL_SERVER_ERROR;
             deferred.reject(object);
         } else if (data) {
-            object.isError = false;
+            object.success = true;
             object.message = messages.SAVED_SUCCESSFULLY;
             object.data = data._id;
             object.type = httpStatus.CREATED;
             deferred.resolve(object);
         } else {
-            object.isError = false;
+            object.success = false;
             object.errorMessage = messages.CANNOT_SAVE;
             object.type = httpStatus.NOT_FOUND;
             deferred.resolve(object);
@@ -95,18 +100,18 @@ var updateQuery = function(objectToUpdate, query, updatedObject, upsert) {
 
     objectToUpdate.update(query, updatedObject, { upsert: upsert },  function(err, data) {
         if (err) {
-            object.isError = true;
+            object.success = false;
             object.errorMessage = err;
             object.type = httpStatus.INTERNAL_SERVER_ERROR;
-            deferred.resolve(object);
+            deferred.reject(object);
         } else if (data) {
-            object.isError = false;
+            object.success = true;
             object.message = messages.UPDATED_SUCCESSFULLY;
             object.data = data;
             object.type = httpStatus.OK;
             deferred.resolve(object);
         } else {
-            object.isError = false;
+            object.success = false;
             object.errorMessage = messages.CANNOT_SAVE;
             object.type = httpStatus.NOT_FOUND;
             deferred.resolve(object);
@@ -128,16 +133,22 @@ var deleteQuery = function(schema, query){
     var deferred = q.defer();
     var object = {};
 
-    schema.remove(query,function(err){
-        if(err){
-            object.isError = true;
+    schema.remove(query,function(err, data){
+        if(err) {
+            object.success = false;
             object.errorMessage = err;
             object.type = httpStatus.INTERNAL_SERVER_ERROR;
+            deferred.reject(object);
+        } else if (data.result.n) {
+            object.success = true;
+            object.message = messages.DELETED_SUCCESSFULLY;
+            object.data = data.result;
+            object.type = httpStatus.OK;
             deferred.resolve(object);
-        }else{
-            object.isError = false;
-            object.errorMessage = messages.DELETED_SUCCESSFULLY;
-            object.type = httpStatus.NO_CONTENT;
+        } else {
+            object.success = false;
+            object.errorMessage = messages.NOT_FOUND;
+            object.type = httpStatus.NOT_FOUND;
             deferred.resolve(object);
         }
     });
@@ -226,17 +237,17 @@ var findOneQuery = function(schema, query, attr) {
 
     schema.findOne(query, attr, function(err, data) {
         if (err) {
-            object.isError = true;
+            object.success = false;
             object.errorMessage = err;
             object.type = httpStatus.INTERNAL_SERVER_ERROR;
-            deferred.resolve(object);
+            deferred.reject(object);
         } else if (data) {
-            object.isError = false;
+            object.success = true;
             object.data = data;
             object.type = httpStatus.OK;
             deferred.resolve(object);
         } else {
-            object.isError = false;
+            object.success = false;
             object.errorMessage = messages.NOT_FOUND;
             object.type = httpStatus.NOT_FOUND;
             deferred.resolve(object);
