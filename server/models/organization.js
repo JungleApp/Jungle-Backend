@@ -17,7 +17,11 @@ var ngoSchema = new mongoose.Schema({
     },
     password : String,
     description : String,
-    causes : []
+    causes : [],
+    location : {
+        country: String,
+        city: String
+    }
 });
 
 // generating a hash
