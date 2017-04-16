@@ -63,6 +63,16 @@ function getOrgById(req, res) {
 }
 
 /**
+ * Get all organisations details
+ */
+function getAllOrg(req,res){
+    var object = {};
+    databaseCall.findQuery(ngoSchema,object).then(function (response){
+        res.json(response.data);
+    });
+}
+
+/**
  * Update organisation data by id
  */
 function updateById(req, res){
@@ -81,7 +91,7 @@ function updateById(req, res){
 }
 
 /**
- * Delete organisation data by email
+ * Delete organisation data by id
  */
 function deleteOrg(req, res) {
     var object = {};
@@ -91,12 +101,3 @@ function deleteOrg(req, res) {
     });
 }
 
-/**
- * Get all organisations details
- */
-function getAllOrg(req,res){
-    var object = {};
-    databaseCall.findQuery(ngoSchema,object).then(function (response){
-        res.json(response.data);
-    });
-}

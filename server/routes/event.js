@@ -1,5 +1,5 @@
 /**
- * User API Handler
+ * Event API Handler
  * Created 4/15/17 @jessebartola
  */
 
@@ -46,6 +46,16 @@ function getEventById(req, res) {
 }
 
 /**
+ * Get all Events
+ */
+function getAllEvents(req,res){
+    var object = {};
+    databaseCall.findQuery(eventSchema, object).then(function (response){
+        res.json(response.data);
+    });
+}
+
+/**
  * Update Event by ObjectID
  */
 function updateById(req, res){
@@ -71,15 +81,5 @@ function deleteEvent(req, res) {
     object['_id'] = mongoose.Types.ObjectId(req.params.id);
     databaseCall.deleteQuery(eventSchema, object).then(function (response) {
         res.json(response);
-    });
-}
-
-/**
- * Get all Events
- */
-function getAllEvents(req,res){
-    var object = {};
-    databaseCall.findQuery(eventSchema, object).then(function (response){
-        res.json(response.data);
     });
 }
