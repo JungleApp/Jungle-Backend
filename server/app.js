@@ -9,11 +9,16 @@ var mongoose = require('mongoose');
 var expressValidator = require('express-validator');
 var fs = require('fs');
 
+require('./models/attendee');
 require('./models/category');
+require('./models/event');
 require('./models/organization');
 
-var org = require('./routes/organization');
+var attendee = require('./routes/attendee');
 var category = require('./routes/category');
+var event = require('./routes/event');
+var org = require('./routes/organization');
+
 
 var app = express();
 
@@ -51,8 +56,10 @@ app.use(expressValidator({
   }
 }));
 
-app.use('/api/org', org);
+app.use('/api/attendee', attendee);
 app.use('/api/category', category);
+app.use('/api/event', event);
+app.use('/api/org', org);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
