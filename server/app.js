@@ -19,6 +19,7 @@ var category = require('./routes/category');
 var event = require('./routes/event');
 var org = require('./routes/organization');
 
+var auth = require('./utility/auth');
 
 var app = express();
 
@@ -56,10 +57,10 @@ app.use(expressValidator({
   }
 }));
 
-app.use('/api/attendee', attendee);
-app.use('/api/category', category);
-app.use('/api/event', event);
-app.use('/api/org', org);
+app.use('/api/attendee', auth.authentication, attendee);
+app.use('/api/category', auth.authentication, category);
+app.use('/api/event', auth.authentication, event);
+app.use('/api/org', auth.authentication, org);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
